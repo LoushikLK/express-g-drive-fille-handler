@@ -23,8 +23,8 @@ routeParser(app);
 errorHandler(app);
 
 //start the server and  listen to the port specified
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
+// app.listen(PORT, () => {
+//   console.log(`Server is running on port ${PORT}`);
+// });
 
-// export default app;
+export default app;

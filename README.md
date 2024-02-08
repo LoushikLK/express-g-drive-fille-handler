@@ -42,6 +42,12 @@ Start the development server
 
 ## Deployment
 
+To build the project
+
+```bash
+  npm run build
+```
+
 To deploy this project run
 
 ```bash
@@ -68,7 +74,7 @@ To run this project, you will need to add the following environment variables to
 
 ## Demo
 
-- [Deployed to AWS Lambda](https://awesomeopensource.com/project/elangosundar/awesome-README-templates)
+- [Deployed to AWS Lambda](https://sfqmxzalh0.execute-api.ap-south-1.amazonaws.com/dev/api/v1/google/login)
 
 ## API Reference
 
@@ -120,3 +126,15 @@ To run this project, you will need to add the following environment variables to
 ```http
   GET {{BASE_URL}}/api/v1/drive/status
 ```
+
+## Process
+
+- Open a web browser and navigate to the login page by entering the URL: https://sfqmxzalh0.execute-api.ap-south-1.amazonaws.com/dev/api/v1/auth/google/login.
+- Upon reaching the login page, the user will be redirected to the Google OAuth service for authentication.
+- Follow the prompts provided by Google OAuth to complete the login process.
+- In case of any security warnings or alerts encountered during the authentication process, click on the "Advanced" option (or equivalent) to view additional options and then allow.
+- Proceed by selecting the option to continue or access the page despite the security warning.
+- After successful authentication, the user will be redirected to a page with a URL structured as / followed by ?token={TOKEN}.
+- Here, {TOKEN} represents the authentication token generated for the accessing the api.
+- Paste the copied authentication token as a bearer token for all subsequent API requests made within the application.
+- Ensure that the token is included in the appropriate headers of the API requests to authenticate and authorize access to protected resources.

@@ -22,22 +22,25 @@ frameworkVersion: "3"
 
 provider:
   name: aws
-  runtime: nodejs18.x
+  runtime: nodejs20.x
   region: ap-south-1
   stage: dev
+  memorySize: 2048
 
 functions:
   app:
     handler: handler.app
     events:
-      - httpApi:
-          path: ANY /{proxy+}
-          method: ANY /
+      - http:
+          path: /{proxy+}
+          method: ANY
+          cors: true
+
     environment:
       MONGODB_URI: mongodb+srv://aws-cicd:irBdoFuyxjtrOwnS@aws-cicd-cluster-1.xf9i2ce.mongodb.net/test?retryWrites=true&w=majority
       GOOGLE_API_KEY: AIzaSyAXzgIgN_7HoM4BqmdZKPw3XC7kGPs8t5E
       GOOGLE_CLIENT_ID: 1098575434306-82fj95t84uerodpckkjbk83rlmqpq9tt.apps.googleusercontent.com
       GOOGLE_CLIENT_SECRET: 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
-      GOOGLE_CALLBACK_URL: http://localhost:8000/api/v1/auth/google/callback
+      GOOGLE_CALLBACK_URL: https://sfqmxzalh0.execute-api.ap-south-1.amazonaws.com/dev/api/v1/auth/google/callback
       PASSPORT_SECRET: thisisasecurelongtext
       JWT_SECRET: thisisasecurejwttoken
