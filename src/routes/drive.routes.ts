@@ -3,6 +3,7 @@ import DriveController from "../controllers/drive.controller";
 import { isAuthenticated } from "../middlewares/auth.middleware";
 import validator from "../middlewares/validation.middleware";
 import {
+  downloadFileValidation,
   getAllFilesValidation,
   transferFileValidation,
 } from "../validations/drive.validation";
@@ -11,11 +12,11 @@ const router = express.Router();
 
 //transfer file route
 router.get(
-  "/download",
-  transferFileValidation,
+  "/download/:srcFileId",
+  downloadFileValidation,
   validator,
   isAuthenticated,
-  DriveController.transferFile
+  DriveController.downloadFile
 );
 //transfer file route
 router.post(

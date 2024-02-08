@@ -1,10 +1,13 @@
-import { body, query } from "express-validator";
+import { body, param, query } from "express-validator";
 
 export const transferFileValidation = [
   body("srcFileId").notEmpty().withMessage("Source file id is required"),
   body("destFolderId")
     .notEmpty()
     .withMessage("Destination folder id is required"),
+];
+export const downloadFileValidation = [
+  param("srcFileId").notEmpty().withMessage("Source file id is required"),
 ];
 
 export const getAllFilesValidation = [
