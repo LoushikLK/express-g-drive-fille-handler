@@ -1,24 +1,12 @@
 import { NextFunction, Request, Response } from "express";
 import {
-  downloadFile,
+  getFileStatus,
   listAlFiles,
   transferFile,
 } from "../functions/drive.function";
 import { IUser } from "../types/user";
 
 const DriveController = {
-  download: async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      await downloadFile();
-
-      res.json({
-        success: true,
-        message: "Downloaded successfully",
-      });
-    } catch (error) {
-      next(error);
-    }
-  },
   transferFile: async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { srcFileId, destFolderId } = req.body;
@@ -31,7 +19,20 @@ const DriveController = {
 
       res.json({
         success: true,
-        message: "Transferred successfully",
+        message: "Transfer started",
+      });
+    } catch (error) {
+      next(error);
+    }
+  },
+  getStatus: async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const status = await getFileStatus();
+
+      res.json({
+        success: true,
+        message: "Transfer started",
+        data: status,
       });
     } catch (error) {
       next(error);

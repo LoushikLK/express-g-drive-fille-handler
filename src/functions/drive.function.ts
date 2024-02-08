@@ -1,13 +1,6 @@
 import { google } from "googleapis";
 import TransferService from "../services/upload.service";
 
-export const downloadFile = async () => {
-  try {
-    return true;
-  } catch (error) {
-    throw error;
-  }
-};
 export const transferFile = async (
   srcFileId: string,
   destFolderId: string,
@@ -16,10 +9,27 @@ export const transferFile = async (
   try {
     const srcPath = new Date().getTime().toString();
 
-    TransferService.getInstance().downloadFile(srcFileId, srcPath, token);
-    TransferService.getInstance().uploadFile(destFolderId, srcPath, token);
+    await TransferService.getInstance().downloadFile(
+      srcFileId,
+      srcPath,
+      token,
+      destFolderId
+    );
+    // await TransferService.getInstance().uploadFile(
+    //   destFolderId,
+    //   srcPath,
+    //   token
+    // );
 
     return true;
+  } catch (error) {
+    throw error;
+  }
+};
+export const getFileStatus = async () => {
+  try {
+    const data = TransferService.getInstance().getDownloadStat();
+    return data;
   } catch (error) {
     throw error;
   }
