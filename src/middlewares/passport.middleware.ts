@@ -10,9 +10,10 @@ import { UserModel } from "../models/user.model";
 
 export default class PassportService {
   /**
-   * passportGoogleLoginStrategy
+   * Configure and use Passport Google login strategy
    */
   public async passportGoogleLoginStrategy() {
+    // Configure the Google strategy for Passport
     passport.use(
       new GoogleStrategy(
         {
@@ -27,8 +28,7 @@ export default class PassportService {
           done: VerifyCallback
         ) => {
           try {
-            //verify  user
-
+            // Verify user with Google profile data
             const user = await UserModel.findOneAndUpdate(
               {
                 email: profile?.emails?.[0].value,
@@ -48,8 +48,11 @@ export default class PassportService {
             );
 
             if (!user) throw new NotFound("User not found.");
+
+            // Return user
             done(null, user);
           } catch (error) {
+            // Return error
             if (error instanceof Error) {
               return done(error);
             }

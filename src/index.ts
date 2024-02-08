@@ -16,7 +16,7 @@ connectToDb();
 //set up all the primary middlewares
 topLevelMiddlewares(app);
 
-//set up all routes
+//set up all routes present in the routes folder
 routeParser(app);
 
 //handles error and not found routes

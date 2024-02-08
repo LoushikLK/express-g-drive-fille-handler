@@ -7,15 +7,18 @@ import logger from "../services/logger.service";
 import { IUser } from "../types/user";
 import PassportService from "./passport.middleware";
 
-//setup middlewares
+/**
+ * Set up middlewares for the application
+ * @param {Application} app - The Express Application
+ */
 const topLevelMiddlewares = (app: Application) => {
-  //parse incoming request body as JSON
+  // Parse incoming request body as JSON
   app.use(express.json());
 
-  //parse incoming request body as URL encoded
+  // Parse incoming request body as URL encoded
   app.use(express.urlencoded({ extended: true }));
 
-  //set up cors
+  // Set up CORS
   app.use(
     cors({
       origin: "*",
@@ -24,7 +27,7 @@ const topLevelMiddlewares = (app: Application) => {
     })
   );
 
-  //create session
+  // Create session
   app.use(
     session({
       secret: String(process.env.PASSPORT_SECRET),
@@ -33,16 +36,16 @@ const topLevelMiddlewares = (app: Application) => {
     })
   );
 
+  // Initialize passport
   app.use(passport.initialize());
 
-  //authenticate using session
+  // Authenticate using session
   app.use(passport.authenticate("session"));
 
-  //load passport strategies
-
+  // Load passport strategies
   new PassportService().passportGoogleLoginStrategy();
 
-  //passport middleware to serialize and deserialize
+  // Passport middleware to serialize and deserialize
   passport.serializeUser((user, done) => {
     done(null, user as IUser);
   });
@@ -51,9 +54,10 @@ const topLevelMiddlewares = (app: Application) => {
     done(null, user as IUser);
   });
 
+  // Use helmet for security headers
   app.use(helmet());
 
-  //set up logger for all requests
+  // Set up logger for all requests
   app.use((req, res, next) => {
     logger.info(req?.user);
 
@@ -65,7 +69,7 @@ const topLevelMiddlewares = (app: Application) => {
       },
     ]);
 
-    //call next middleware
+    // Call next middleware
     next();
   });
 };
