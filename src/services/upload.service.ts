@@ -197,9 +197,6 @@ class TransferService {
 
         download.data.pipe(writeStream);
 
-        // download.data.once("data", () => {
-        //   resolve(true);
-        // });
         resolve(true);
       } catch (error) {
         logger.error(error);
@@ -310,11 +307,11 @@ class TransferService {
   public getDownloadStat() {
     try {
       return {
+        fileDetails: this.fileDetails,
         downloadStatus: this.downloadStatus,
         downloadProgress: this.progress,
         uploadStatus: this.uploadStatus,
         totalDownload: this.totalDownload,
-        fileDetails: this.fileDetails,
         totalUploaded: this.totalUploaded,
         uploadProgress: this.uploadProgress,
       };
