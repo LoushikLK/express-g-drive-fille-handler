@@ -2,6 +2,7 @@ import { createReadStream, createWriteStream, rmSync, unlinkSync } from "fs";
 import { OAuth2Client } from "google-auth-library";
 import { google } from "googleapis";
 import path from "path";
+import internal from "stream";
 import logger from "./logger.service";
 
 /**
@@ -43,6 +44,77 @@ class TransferService {
     return TransferService.instance;
   }
 
+  /**
+   * Downloads the drive file .
+   *
+   * @param {string} fileId - the ID of the file to be download
+   * @param {string} token - google access token
+   *
+   **/
+  public async downloadFileOnly(
+    fileId: string,
+    token: string
+  ): Promise<internal.Readable> {
+    return new Promise(async (resolve, reject) => {
+      try {
+        //set the credentials to be used
+        this.googleAuth.setCredentials({
+          access_token: token,
+        });
+
+        //initiate the drive
+        let drive = google.drive({
+          version: "v3",
+          auth: this.googleAuth,
+        });
+
+        //get the file details
+        const res = await drive.files.get({ fileId, fields: "*" });
+        const fileDetails = res.data;
+
+        //set the file details to be used
+        this.fileDetails = {
+          name: fileDetails?.name || undefined,
+          mimeType: fileDetails?.mimeType || undefined,
+          size: fileDetails?.size ? Number(fileDetails?.size) : undefined,
+        };
+
+        //download the file to the destination
+        const download = await drive.files.get(
+          {
+            fileId: fileId,
+            alt: "media",
+          },
+          {
+            responseType: "stream",
+          }
+        );
+
+        //handle the events
+        download.data.on("error", (error) => {
+          logger.error(error);
+          this.downloadStatus = "error";
+        });
+
+        download.data.on("end", () => {
+          logger.info("Downloaded completed");
+          this.downloadStatus = "complete";
+        });
+
+        download.data.on("data", (chunk) => {
+          this.totalDownload += chunk.length;
+          this.progress = Math.ceil(
+            (this.totalDownload / (this.fileDetails.size || 0)) * 100
+          );
+        });
+
+        resolve(download.data);
+      } catch (error) {
+        logger.error(error);
+        reject(error);
+      }
+    });
+  }
   /**
    * Downloads a file to the specified folder.
    *

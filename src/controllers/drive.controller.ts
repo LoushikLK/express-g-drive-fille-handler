@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import {
+  downloadDriveFile,
   getFileStatus,
   listAlFiles,
   transferFile,
@@ -7,6 +8,35 @@ import {
 import { IUser } from "../types/user";
 
 const DriveController = {
+  /**
+   * A function to transfer a file from source to destination folder.
+   *
+   * @param {Request} req - the request object
+   * @param {Response} res - the response object
+   * @param {NextFunction} next - the next function
+   * @return {Promise<void>} a promise that resolves when the file transfer is completed
+   */
+  downloadFile: async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> => {
+    try {
+      // get the source file id and destination folder id from the request body
+      const { srcFileId } = req.params;
+
+      // call the download function with the source file id  and user's google access token
+      const stream = await downloadDriveFile(
+        srcFileId,
+        (req?.user as IUser)?.googleAccessToken
+      );
+
+      //pipe the stream to the response
+      stream.pipe(res);
+    } catch (error) {
+      next(error);
+    }
+  },
   /**
    * A function to transfer a file from source to destination folder.
    *

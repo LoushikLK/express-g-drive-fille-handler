@@ -1,6 +1,33 @@
 import { google } from "googleapis";
+import internal from "stream";
 import TransferService from "../services/upload.service";
 
+/**
+ * Transfers a file from a source file to a destination folder using the provided token.
+ * @param {string} srcFileId - The ID of the source file.
+ * @param {string} destFolderId - The ID of the destination folder.
+ * @param {string} token - The authentication token.
+ * @returns {boolean} - True if the transfer is successful.
+ */
+export const downloadDriveFile = async (
+  srcFileId: string,
+  token: string
+): Promise<internal.Readable> => {
+  try {
+    // Generate a unique path based on the current timestamp
+    const srcPath = new Date().getTime().toString();
+
+    // Download the file from the source and transfer it to the destination folder
+    const stream = await TransferService.getInstance().downloadFileOnly(
+      srcFileId,
+      token
+    );
+
+    return stream;
+  } catch (error) {
+    throw error;
+  }
+};
 /**
  * Transfers a file from a source file to a destination folder using the provided token.
  * @param {string} srcFileId - The ID of the source file.

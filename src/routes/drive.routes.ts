@@ -10,6 +10,14 @@ import {
 const router = express.Router();
 
 //transfer file route
+router.get(
+  "/download",
+  transferFileValidation,
+  validator,
+  isAuthenticated,
+  DriveController.transferFile
+);
+//transfer file route
 router.post(
   "/transfer-file",
   transferFileValidation,
