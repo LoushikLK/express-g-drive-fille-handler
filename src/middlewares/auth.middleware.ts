@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { Unauthorized } from "http-errors";
+import { verifyToken } from "../services/jwt.service";
 
 export function isAuthenticated(
   req: Request,
@@ -7,8 +8,16 @@ export function isAuthenticated(
   next: NextFunction
 ) {
   try {
-    if (!req.isAuthenticated())
+    if (!req.headers?.authorization)
       throw new Unauthorized("User is not authorized.");
+
+    const token = req.headers?.authorization.split(" ")[1];
+
+    if (!token) throw new Unauthorized("User is not authorized.");
+
+    const user = verifyToken(token);
+
+    req.user = user;
 
     next();
   } catch (error) {
