@@ -74,7 +74,7 @@ To run this project, you will need to add the following environment variables to
 
 ## Demo
 
-- [Deployed to AWS Lambda](https://sfqmxzalh0.execute-api.ap-south-1.amazonaws.com/dev/api/v1/google/login)
+- [Deployed to AWS Lambda](https://sfqmxzalh0.execute-api.ap-south-1.amazonaws.com/dev/api/v1/auth/google/login)
 
 ## API Reference
 
